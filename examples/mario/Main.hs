@@ -13,11 +13,14 @@ import           Data.Monoid
 import           Miso
 import           Miso.String
 
-import qualified Language.Javascript.JSaddle.Warp as JSaddle
+import qualified Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle
 
-#ifdef ghcjs_HOST_OS
+#if defined(ghcjs_HOST_OS)
 run :: Int -> JSM () -> IO ()
 run = JSaddle.run
+#elif defined(JSADDLE_WASM)
+run :: Int -> JSM () -> IO ()
+run = const JSaddle.run
 #else
 import           Network.Wai.Application.Static
 import qualified Network.Wai as Wai

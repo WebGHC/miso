@@ -1,6 +1,7 @@
 -- | Haskell language pragma
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE CPP #-}
 
 -- | Haskell module declaration
 module Main where
@@ -10,7 +11,7 @@ import Miso
 import Miso.String
 
 import Control.Monad.IO.Class
-import Language.Javascript.JSaddle.Warp as JSaddle
+import Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle
 
 -- | Type synonym for an application model
 type Model = Int

@@ -31,17 +31,30 @@ flag tests
   description:
     Builds Miso's tests
 
-flag jsaddle
+flag jsaddle-warp
   manual: True
   default:
     False
   description:
-    Compile with JSaddle
+    Compile with JSaddle-warp
+
+flag jsaddle-wasm
+  manual: True
+  default:
+    False
+  description:
+    Compile with JSaddle-wasm
+
 
 executable todo-mvc
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle)) || !flag(examples)
+  if flag(jsaddle-warp)
+    cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+  if flag(jsaddle-wasm)
+    cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
+
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -50,9 +63,14 @@ executable todo-mvc
       aeson,
       base < 5,
       containers,
-      jsaddle-warp,
       miso,
       transformers
+    if flag(jsaddle-warp)
+      build-depends:
+        jsaddle-warp
+    if flag(jsaddle-wasm)
+      build-depends:
+        jsaddle-wasm
     default-language:
       Haskell2010
 
@@ -126,7 +144,7 @@ executable canvas2d
 executable router
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle)) || !flag(examples)
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -135,7 +153,7 @@ executable router
       aeson,
       base < 5,
       containers,
-      jsaddle-warp,
+      jsaddle-wasm,
       miso,
       servant,
       transformers
@@ -145,7 +163,7 @@ executable router
 executable websocket
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle)) || !flag(examples)
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -154,7 +172,7 @@ executable websocket
       aeson,
       base < 5,
       containers,
-      jsaddle-warp,
+      jsaddle-wasm,
       miso,
       transformers
     default-language:
@@ -163,7 +181,12 @@ executable websocket
 executable mario
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle)) || !flag(examples)
+  if flag(jsaddle-warp)
+    cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+  if flag(jsaddle-wasm)
+    cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
+
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -172,13 +195,18 @@ executable mario
       base < 5,
       containers,
       miso,
-      jsaddle-warp
-    if flag(jsaddle) && !impl(ghcjs)
+      jsaddle-wasm
+    if !impl(ghcjs)
       build-depends:
-        wai,
-        wai-app-static,
-        warp,
-        websockets
+      if flag(jsaddle-warp)
+        build-depends:
+          websockets,
+          wai,
+          wai-app-static,
+          warp
+      if flag(jsaddle-wasm)
+        build-depends:
+
     default-language:
       Haskell2010
 
@@ -228,10 +256,110 @@ executable mathml
     default-language:
       Haskell2010
 
+executable flatris
+  main-is:
+    Main.hs
+  if flag(jsaddle-warp)
+    cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+  if flag(jsaddle-wasm)
+    cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
+
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
+    buildable: False
+  else
+    hs-source-dirs:
+      examples/flatris/src
+    build-depends:
+      base,
+      miso,
+      containers,
+      aeson,
+      aeson-pretty,
+      random
+    if flag(jsaddle-warp)
+      build-depends:
+        jsaddle-warp
+    if flag(jsaddle-wasm)
+      build-depends:
+        jsaddle-wasm
+
+    default-language:
+      Haskell2010
+    other-modules:
+      Action
+      Grid
+      Model
+      Tetromino
+      Update
+      View
+
+executable snake
+  main-is:
+    Main.hs
+  if flag(jsaddle-warp)
+    cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+  if flag(jsaddle-wasm)
+    cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
+
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
+    buildable: False
+  else
+    hs-source-dirs:
+      examples/snake
+    build-depends:
+      base,
+      miso,
+      containers,
+      random
+    if flag(jsaddle-warp)
+      build-depends:
+        jsaddle-warp
+    if flag(jsaddle-wasm)
+      build-depends:
+        jsaddle-wasm
+
+    default-language:
+      Haskell2010
+
+executable 2048
+  main-is:
+    Main.hs
+  if flag(jsaddle-warp)
+    cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+  if flag(jsaddle-wasm)
+    cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
+
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
+    buildable: False
+  else
+    hs-source-dirs:
+      examples/2048/src
+    build-depends:
+      base,
+      miso,
+      containers,
+      aeson,
+      aeson-pretty,
+      random
+    if flag(jsaddle-warp)
+      build-depends:
+        jsaddle-warp
+    if flag(jsaddle-wasm)
+      build-depends:
+        jsaddle-wasm
+
+    default-language:
+      Haskell2010
+
 executable simple
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle)) || !flag(examples)
+  if flag(jsaddle-warp)
+    cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+  if flag(jsaddle-wasm)
+    cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
+
+  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -240,9 +368,15 @@ executable simple
       aeson,
       base < 5,
       containers,
-      jsaddle-warp,
       miso,
       transformers
+    if flag(jsaddle-warp)
+      build-depends:
+        jsaddle-warp
+    if flag(jsaddle-wasm)
+      build-depends:
+        jsaddle-wasm
+
     default-language:
       Haskell2010
 
@@ -315,12 +449,15 @@ library
     servant,
     text,
     transformers
-  if impl(ghcjs) || flag (jsaddle)
-    if flag(jsaddle)
+  if impl(ghcjs) || flag (jsaddle-warp) || flag (jsaddle-wasm)
+    if flag(jsaddle-warp) || flag(jsaddle-wasm)
       build-depends:
         file-embed,
         jsaddle
-      cpp-options: -DJSADDLE
+      if flag(jsaddle-warp)
+        cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
+      if flag(jsaddle-wasm)
+        cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
       hs-source-dirs:
         jsaddle-ffi
     else

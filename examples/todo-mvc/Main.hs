@@ -9,7 +9,8 @@
 {-# LANGUAGE LambdaCase                 #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE ExtendedDefaultRules #-}
+{-# LANGUAGE ExtendedDefaultRules       #-}
+{-# LANGUAGE CPP                        #-}
 module Main where
 
 import           Data.Aeson hiding (Object)
@@ -22,7 +23,7 @@ import           Miso.String (MisoString)
 import qualified Miso.String as S
 
 import           Control.Monad.IO.Class
-import           Language.Javascript.JSaddle.Warp as JSaddle
+import           Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle
 
 default (MisoString)
 

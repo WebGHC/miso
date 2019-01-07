@@ -1,0 +1,9 @@
+[submodule "examples/flatris"]
+	path = examples/flatris
+	url = https://github.com/ptigwe/hs-flatris.git
+[submodule "examples/snake"]
+	path = examples/snake
+	url = https://github.com/lbonn/miso-snake.git
+[submodule "examples/2048"]
+	path = examples/2048
+	url = https://github.com/ptigwe/hs2048.git

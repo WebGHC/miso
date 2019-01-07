@@ -5,7 +5,9 @@
 {-# LANGUAGE RecordWildCards     #-}
 {-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE KindSignatures      #-}
+#ifdef JSADDLE_WARP
 {-# LANGUAGE TemplateHaskell #-}
+#endif
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Miso
@@ -66,7 +68,7 @@ common
   -> (Sink action -> JSM (IORef VTree))
   -> JSM ()
 common App {..} m getView = do
-#ifdef JSADDLE
+#ifdef JSADDLE_WARP
   _ <- eval ($(embedStringFile "jsbits/delegate.js") :: JSString)
   _ <- eval ($(embedStringFile "jsbits/diff.js") :: JSString)
   _ <- eval ($(embedStringFile "jsbits/isomorphic.js") :: JSString)
