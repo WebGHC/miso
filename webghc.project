@@ -6,4 +6,4 @@ repository hackage.mobilehaskell
              8468c561cd02cc7dfe27c56de0da1a5c1a2b1b264fff21f4784f02b8c5a63edd
   key-threshold: 3
 
-packages: . jsaddle-wasm ghcjs-base
+packages: . jsaddle-wasm
