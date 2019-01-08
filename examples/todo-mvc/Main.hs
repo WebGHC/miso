@@ -23,7 +23,9 @@ import           Miso.String (MisoString)
 import qualified Miso.String as S
 
 import           Control.Monad.IO.Class
+#ifdef JSADDLE
 import           Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle
+#endif
 
 default (MisoString)
 

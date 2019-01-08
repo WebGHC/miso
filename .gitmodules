@@ -7,3 +7,9 @@
 [submodule "examples/2048"]
 	path = examples/2048
 	url = https://github.com/ptigwe/hs2048.git
+[submodule "ghcjs-base"]
+	path = ghcjs-base
+	url = git@github.com:ghcjs/ghcjs-base.git
+[submodule "jsaddle-wasm"]
+	path = jsaddle-wasm
+	url = git@github.com:zw3rk/jsaddle-wasm.git

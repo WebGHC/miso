@@ -49,7 +49,7 @@ flag jsaddle-wasm
 executable todo-mvc
   main-is:
     Main.hs
-  if flag(jsaddle-warp)
+  if impl(ghcjs) || flag(jsaddle-warp)
     cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
@@ -65,7 +65,7 @@ executable todo-mvc
       containers,
       miso,
       transformers
-    if flag(jsaddle-warp)
+    if impl(ghcjs) || flag(jsaddle-warp)
       build-depends:
         jsaddle-warp
     if flag(jsaddle-wasm)
@@ -181,7 +181,7 @@ executable websocket
 executable mario
   main-is:
     Main.hs
-  if flag(jsaddle-warp)
+  if impl(ghcjs) || flag(jsaddle-warp)
     cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
@@ -198,7 +198,7 @@ executable mario
       jsaddle-wasm
     if !impl(ghcjs)
       build-depends:
-      if flag(jsaddle-warp)
+      if impl(ghcjs) || flag(jsaddle-warp)
         build-depends:
           websockets,
           wai,
@@ -259,7 +259,7 @@ executable mathml
 executable flatris
   main-is:
     Main.hs
-  if flag(jsaddle-warp)
+  if impl(ghcjs) || flag(jsaddle-warp)
     cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
@@ -276,7 +276,7 @@ executable flatris
       aeson,
       aeson-pretty,
       random
-    if flag(jsaddle-warp)
+    if impl(ghcjs) || flag(jsaddle-warp)
       build-depends:
         jsaddle-warp
     if flag(jsaddle-wasm)
@@ -296,7 +296,7 @@ executable flatris
 executable snake
   main-is:
     Main.hs
-  if flag(jsaddle-warp)
+  if impl(ghcjs) || flag(jsaddle-warp)
     cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
@@ -311,7 +311,7 @@ executable snake
       miso,
       containers,
       random
-    if flag(jsaddle-warp)
+    if impl(ghcjs) || flag(jsaddle-warp)
       build-depends:
         jsaddle-warp
     if flag(jsaddle-wasm)
@@ -324,7 +324,7 @@ executable snake
 executable 2048
   main-is:
     Main.hs
-  if flag(jsaddle-warp)
+  if impl(ghcjs) || flag(jsaddle-warp)
     cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
@@ -341,7 +341,7 @@ executable 2048
       aeson,
       aeson-pretty,
       random
-    if flag(jsaddle-warp)
+    if impl(ghcjs) || flag(jsaddle-warp)
       build-depends:
         jsaddle-warp
     if flag(jsaddle-wasm)
@@ -354,7 +354,7 @@ executable 2048
 executable simple
   main-is:
     Main.hs
-  if flag(jsaddle-warp)
+  if impl(ghcjs) || flag(jsaddle-warp)
     cpp-options: -DJSADDLE -DJSADDLE_WARP -DJSADDLE_BACKEND=Warp
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
@@ -370,7 +370,7 @@ executable simple
       containers,
       miso,
       transformers
-    if flag(jsaddle-warp)
+    if impl(ghcjs) || flag(jsaddle-warp)
       build-depends:
         jsaddle-warp
     if flag(jsaddle-wasm)

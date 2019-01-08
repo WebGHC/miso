@@ -149,3 +149,159 @@ index 65aaa0a..fcee97a 100644
    where
      initialAction = NoOp
      mountPoint = Nothing
+diff --git a/submodules.patch b/submodules.patch
+index 2bb4af1..a8ca170 100644
+--- a/submodules.patch
++++ b/submodules.patch
+@@ -1,151 +0,0 @@
+-Submodule examples/2048 contains modified content
+-diff --git a/examples/2048/src/Logic.hs b/examples/2048/src/Logic.hs
+-index 1130442..23d94dd 100644
+---- a/examples/2048/src/Logic.hs
+-+++ b/examples/2048/src/Logic.hs
+-@@ -10,6 +10,8 @@ import Miso
+- import System.Random
+- import Touch
+- 
+-+import Control.Monad.IO.Class
+-+
+- groupedByTwo :: Eq a => [a] -> [[a]]
+- groupedByTwo [x] = [[x]]
+- groupedByTwo [x, y] =
+-@@ -158,14 +160,14 @@ updateGameState (GetArrows arr) state = step nState <# pure Sync
+-     nState = state {direction = toDirection arr}
+- updateGameState (TouchStart (TouchEvent touch)) state =
+-   state {prevTouch = Just touch} <# do
+--    putStrLn "Touch did start"
+-+    liftIO $ putStrLn "Touch did start"
+-     pure NoOp
+- updateGameState (TouchEnd (TouchEvent touch)) state =
+-   state {prevTouch = Nothing} <# do
+--    putStrLn "Touch did end"
+-+    liftIO $ putStrLn "Touch did end"
+-     let (GetArrows x) =
+-           swipe (client . fromJust . prevTouch $ state) (client touch)
+--    print x
+-+    liftIO $ print x
+-     pure $ swipe (client . fromJust . prevTouch $ state) (client touch)
+- updateGameState Init state = state <# pure NewGame
+- updateGameState _ state = noEff state
+-diff --git a/examples/2048/src/Main.hs b/examples/2048/src/Main.hs
+-index a1bfc24..d3e00f4 100644
+---- a/examples/2048/src/Main.hs
+-+++ b/examples/2048/src/Main.hs
+-@@ -1,6 +1,7 @@
+- -- | Haskell language pragma
+- {-# LANGUAGE OverloadedStrings #-}
+- {-# LANGUAGE RecordWildCards #-}
+-+{-# LANGUAGE CPP #-}
+- 
+- -- | Haskell module declaration
+- module Main where
+-@@ -17,10 +18,13 @@ import Logic
+- import Rendering
+- import Touch
+- 
+-+import           Control.Monad.IO.Class
+-+import           Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle (run)
+-+
+- -- | Entry point for a miso application
+- main :: IO ()
+--main = do
+--  stdGen <- getStdGen
+-+main = JSaddle.run 8080 $ do
+-+  stdGen <- liftIO $ getStdGen
+-   let (seed, _) = random stdGen
+-   startApp App {model = defaultGame {randomSeed = seed}, ..}
+-   where
+-Submodule examples/flatris contains modified content
+-diff --git a/examples/flatris/src/Main.hs b/examples/flatris/src/Main.hs
+-index 711ce51..9b65f09 100644
+---- a/examples/flatris/src/Main.hs
+-+++ b/examples/flatris/src/Main.hs
+-@@ -1,6 +1,7 @@
+- -- | Haskell language pragma
+- {-# LANGUAGE RecordWildCards #-}
+- {-# LANGUAGE OverloadedStrings #-}
+-+{-# LANGUAGE CPP #-}
+- 
+- -- | Haskell module declaration
+- module Main where
+-@@ -13,6 +14,9 @@ import System.Random
+- import Miso
+- import qualified Miso.String as S
+- 
+-+import           Control.Monad.IO.Class
+-+import           Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle (run)
+-+
+- import Action
+- import Model
+- import Update
+-@@ -20,13 +24,15 @@ import View
+- 
+- -- | Entry point for a miso application
+- main :: IO ()
+--main = do
+--  t <- now
+--  gen <- getStdGen
+--  let (tetro, nGen) = random gen
+--  let seed = fst . random $ nGen :: Int
+--  let m = initialModel {time = t, nextTetro = tetro, randSeed = seed}
+--  startApp App {model = m, initialAction = Init, ..}
+-+main =
+-+  JSaddle.run 8080 $ do
+-+    t <- now
+-+    gen <- liftIO getStdGen
+-+    let (tetro, nGen) = random gen
+-+    let seed = fst . random $ nGen :: Int
+-+    let m = initialModel {time = t, nextTetro = tetro, randSeed = seed}
+-+
+-+    startApp App {model = m, initialAction = Init, ..}
+-   where
+-     update = updateModel -- update function
+-     view = viewModel -- view function
+-Submodule examples/snake contains modified content
+-diff --git a/examples/snake/Main.hs b/examples/snake/Main.hs
+-index 65aaa0a..fcee97a 100644
+---- a/examples/snake/Main.hs
+-+++ b/examples/snake/Main.hs
+-@@ -1,6 +1,7 @@
+- {-# LANGUAGE MultiWayIf        #-}
+- {-# LANGUAGE OverloadedStrings #-}
+- {-# LANGUAGE RecordWildCards   #-}
+-+{-# LANGUAGE CPP               #-}
+- 
+- module Main where
+- 
+-@@ -14,6 +15,9 @@ import           Miso
+- import           Miso.String        (MisoString, ms)
+- import           Miso.Svg           hiding (height_, id_, style_, width_)
+- 
+-+import           Control.Monad.IO.Class
+-+import           Language.Javascript.JSaddle.JSADDLE_BACKEND as JSaddle (run)
+-+
+- -- | miso-snake: heavily inspired by elm-snake
+- -- (https://github.com/theburningmonk/elm-snake)
+- 
+-@@ -21,17 +25,19 @@ segmentDim = 15
+- cherryRadius = 7.5
+- (width, height) = (600, 600)
+- 
+-+#ifndef JSADDLE_WASM
+- foreign import javascript unsafe "$r = performance.now();"
+-   now :: IO Double
+-+#endif
+- 
+- -- | Utility for periodic tick subscriptions
+- every :: Int -> (Double -> action) -> Sub action model
+- every n f _ sink = void . forkIO . forever $ do
+-   threadDelay n
+--  sink =<< f <$> now
+-+  sink =<< f <$> (now :: IO Double)
+- 
+- main :: IO ()
+--main = startApp App {..}
+-+main = JSaddle.run 8080 $ startApp App {..}
+-   where
+-     initialAction = NoOp
+-     mountPoint = Nothing
