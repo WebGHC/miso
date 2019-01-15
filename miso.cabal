@@ -77,7 +77,7 @@ executable todo-mvc
 executable threejs
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -94,7 +94,7 @@ executable threejs
 executable file-reader
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -111,7 +111,7 @@ executable file-reader
 executable xhr
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -128,7 +128,7 @@ executable xhr
 executable canvas2d
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -144,7 +144,7 @@ executable canvas2d
 executable router
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
+  if (!impl(ghcjs) && !flag(jsaddle-warp)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -163,7 +163,7 @@ executable router
 executable websocket
   main-is:
     Main.hs
-  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
+  if (!impl(ghcjs) && !flag(jsaddle-warp)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -214,7 +214,7 @@ executable mario
 executable svg
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -232,7 +232,7 @@ executable svg
 executable compose-update
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -246,7 +246,7 @@ executable compose-update
 executable mathml
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(examples)
+  if !impl(ghcjs) || !flag(examples) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
@@ -302,7 +302,8 @@ executable snake
   if flag(jsaddle-wasm)
     cpp-options: -DJSADDLE -DJSADDLE_WASM -DJSADDLE_BACKEND=Wasm
 
-  if (!impl(ghcjs) && !flag(jsaddle-warp) && !flag(jsaddle-wasm)) || !flag(examples)
+  buildable: False
+  if (!impl(ghcjs) && !flag(jsaddle-warp)) || !flag(examples)
     buildable: False
   else
     hs-source-dirs:
@@ -384,7 +385,7 @@ executable simple
 executable tests
   main-is:
     Main.hs
-  if !impl(ghcjs) || !flag(tests)
+  if !impl(ghcjs) || !flag(tests) || flag(jsaddle-wasm)
     buildable: False
   else
     hs-source-dirs:
